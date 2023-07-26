@@ -18,7 +18,7 @@ def get_true_or_false_article(article):
                                                                                """)
     prompt_value = prompt_temp.format(dataarticle= article)
 
-    llm_openai = OpenAI(model_name = "gpt-3.5-turbo-16k", temperature=0, openai_api_key)
+    llm_openai = OpenAI(model_name = "gpt-3.5-turbo-16k", temperature=0, openai_api_key = openai_api_key_input)
     respuesta_openai = llm_openai(prompt_value)
     return respuesta_openai
 
@@ -52,7 +52,7 @@ def get_tone_article(blogarticle):
                                                                                         Describe the tone of this web article:
                                                                                         {docstext}""")
     prompt_value = prompt_temp.format(docstext = blogarticle, tones = selecttone)
-    llm_openai = OpenAI(model_name = "gpt-3.5-turbo-16k", temperature=0, openai_api_key)
+    llm_openai = OpenAI(model_name = "gpt-3.5-turbo-16k", temperature=0, openai_api_key = openai_api_key_input)
     tonearticle = llm_openai(prompt_value)
     return tonearticle
 
@@ -62,7 +62,7 @@ def get_tone_author(blogarticle):
                                                                                 Respond with only the full name (list up to 4 full name if necessary) of the author, public figure, or writer that sounds most closely resemble following text:
                                                                                 {docstext}""")
     prompt_value = prompt_temp.format(docstext = blogarticle)
-    llm_openai = OpenAI(model_name = "gpt-3.5-turbo-16k", temperature=0, openai_api_key)
+    llm_openai = OpenAI(model_name = "gpt-3.5-turbo-16k", temperature=0, openai_api_key = openai_api_key_input)
     toneauthor = llm_openai(prompt_value)
     return toneauthor
 
@@ -94,7 +94,7 @@ if article:
                                                                                 - Extract the title of the article and all the content of the article (Leave a line between paragraphs every time you come across \n\n), excluding things that are unrelated, such as footnotes, buttons, information that is not relevant to the article or Or information about seeing any other articles made by the author.
                                                                                 """)
         prompt_value = prompt_temp.format(docstext= docs)
-        llm_openai = OpenAI(model_name = "gpt-3.5-turbo-16k", temperature=0, openai_api_key)
+        llm_openai = OpenAI(model_name = "gpt-3.5-turbo-16k", temperature=0, openai_api_key = openai_api_key_input)
         respuesta_openai = llm_openai(prompt_value)
         return respuesta_openai
     blogarticle = get_article(article)
