@@ -1,5 +1,4 @@
-streamlit -q
-streamlit-lottie
+streamlit
 Pillow
 langchain
 openai
