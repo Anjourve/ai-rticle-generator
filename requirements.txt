@@ -1,3 +1,6 @@
+streamlit -q
+streamlit-lottie
+Pillow
 langchain
 openai
-streamlit
+unstructured
