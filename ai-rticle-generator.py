@@ -70,7 +70,7 @@ def get_authors_tone_description(how_to_describe_tone, blogarticle):
 
     final_prompt = prompt.format(how_to_describe_tone=how_to_describe_tone, blog=blogarticle)
 
-    tonearticle = llm.predict(final_prompt)
+    tonearticle = llm_openai.predict(final_prompt)
 
     return tonearticle
 
