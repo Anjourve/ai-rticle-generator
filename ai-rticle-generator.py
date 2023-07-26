@@ -23,38 +23,55 @@ def get_true_or_false_article(article):
     respuesta_openai = llm_openai(prompt_value)
     return respuesta_openai
 
-def get_tone_article(blogarticle):
-    selecttone = """1. Pace: The speed at which the story unfolds and events occur.
-                    2. Mood: The overall emotional atmosphere or feeling of the piece.
-                    3. Tone: The author's attitude towards the subject matter or characters.
-                    4. Voice: The unique style and personality of the author as it comes through in the writing.
-                    5. Diction: The choice of words and phrases used by the author.
-                    6. Syntax: The arrangement of words and phrases to create well-formed sentences.
-                    7. Imagery: The use of vivid and descriptive language to create mental images for the reader.
-                    8. Theme: The central idea or message of the piece.
-                    9. Point of View: The perspective from which the story is told (first person, third person, etc.).
-                    10. Structure: The organization and arrangement of the piece, including its chapters, sections, or stanzas.
-                    11. Dialogue: The conversations between characters in the piece.
-                    12. Characterization: The way the author presents and develops characters in the story.
-                    13. Setting: The time and place in which the story takes place.
-                    14. Foreshadowing: The use of hints or clues to suggest future events in the story.
-                    15. Irony: The use of words or situations to convey a meaning that is opposite of its literal meaning.
-                    16. Symbolism: The use of objects, characters, or events to represent abstract ideas or concepts.
-                    17. Allusion: A reference to another work of literature, person, or event within the piece.
-                    18. Conflict: The struggle between opposing forces or characters in the story.
-                    19. Suspense: The tension or excitement created by uncertainty about what will happen next in the story.
-                    20. Climax: The turning point or most intense moment in the story.
-                    21. Resolution: The conclusion of the story, where conflicts are resolved and loose ends are tied up."""
 
-    prompt_temp = PromptTemplate(input_variables = ["docstext","tones"], template = """ You are an AI bot that is very good at identifying the types of tones in web articles. Be opinionated and have an active voice. Take a firm stance with your response.
-                                                                                        According to the following tones:
-                                                                                        {tones}
+how_to_describe_tone ="""
+1. Pace: The speed at which the story progresses, which can create suspense or relaxation.
+2. Mood: The overall feeling or atmosphere that a piece of writing creates for the reader.
+3. Voice: The unique style or point of view of the author.
+4. Diction: The choice of words and phrases in a piece of writing.
+5. Syntax: The arrangement of words and phrases to create well-formed sentences.
+6. Imagery: The use of descriptive language to create visual representations of actions, objects, or ideas.
+7. Theme: The underlying message or main idea that the writer wants to convey.
+8. Perspective: The angle of considering things, which shows the opinion or feelings of the individuals involved in a situation.
+9. Irony: The use of words to convey a meaning that is the opposite of its literal meaning.
+10. Humor: The quality of being amusing or comic, especially as expressed in literature.
+11. Sarcasm: The use of irony to mock or convey contempt.
+12. Sentimentality: The quality of being excessively sentimental or emotional.
+13. Formality: The level of seriousness or informality in the language used.
+14. Rhythm: The pattern of stressed and unstressed syllables in a line of writing.
+15. Figurative Language: The use of words or expressions with a meaning that is different from the literal interpretation.
+16. Connotation: The emotional or cultural association with a word beyond its dictionary definition.
+17. Allusion: A reference to a well-known person, place, event, literary work, or work of art.
+18. Symbolism: The use of symbols to represent ideas or qualities.
+19. Foreshadowing: The use of hints or clues to suggest events that will occur later in the story.
+20. Allegory: A story, poem, or picture that can be interpreted to reveal a hidden meaning, typically a moral or political one.
+"""
 
-                                                                                        Describe the tone of this web article:
-                                                                                        {docstext}""")
-    prompt_value = prompt_temp.format(docstext = blogarticle, tones = selecttone)
-    llm_openai = OpenAI(model_name = "gpt-3.5-turbo-16k", temperature=0, openai_api_key = openai_api_key_input)
-    tonearticle = llm_openai(prompt_value)
+def get_authors_tone_description(how_to_describe_tone, blogarticle):
+    template = """
+        You are an AI Bot that is very good at generating writing in a similar tone as examples.
+        Be opinionated and have an active voice.
+        Take a strong stance with your response.
+
+        % HOW TO DESCRIBE TONE
+        {how_to_describe_tone}
+
+        % START OF EXAMPLES
+        {blog}
+        % END OF EXAMPLES
+
+        List out the tone qualities of the example above
+        """
+
+    prompt = PromptTemplate(
+        input_variables=["how_to_describe_tone", "blog"],
+        template=template,
+    )
+
+    final_prompt = prompt.format(how_to_describe_tone=how_to_describe_tone, blog=blogarticle)
+
+    tonearticle = llm.predict(final_prompt)
+
     return tonearticle
 
 def get_tone_author(blogarticle):
