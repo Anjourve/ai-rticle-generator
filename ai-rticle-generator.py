@@ -6,6 +6,12 @@ from langchain.document_loaders import UnstructuredURLLoader
 from langchain.chains.summarize import load_summarize_chain
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 
+
+st.set_page_config( page_title="Kalungi Ai-rticle", layout="wide")
+st.header(":blue[Please provide us with the article you'd like to work with.]")
+
+article = st.text_area(label = "", placeholder = "Please enter the text or URL of the article here.", key = "article_imput")
+
 def get_true_or_false_article(article):
     prompt_temp = PromptTemplate(input_variables = ["dataarticle"], template = """ for this text = {dataarticle}
                                                                                - If the text is a URL, it returns "FALSE"; otherwise, it returns "TRUE".
@@ -60,30 +66,6 @@ def get_tone_author(blogarticle):
     toneauthor = llm_openai(prompt_value)
     return toneauthor
 
-def get_datablog(article):
-    articleurl = f"{article}"
-    headers = {'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:80.0) Gecko/20100101 Firefox/80.0'}
-    loader = UnstructuredURLLoader(urls=[articleurl], headers=headers, ssl_verify=False)
-    return loader.load()
-
-def get_article(article):
-    dataarticleurl = get_datablog(article)
-    text_splitter = RecursiveCharacterTextSplitter(chunk_size = 800, chunk_overlap = 0)
-    docs = text_splitter.split_documents(dataarticleurl)
-
-    prompt_temp = PromptTemplate(input_variables = ["docstext"], template = """ for this data = {docstext}
-                                                                                - Extract the title of the article and all the content of the article (Leave a line between paragraphs every time you come across \n\n), excluding things that are unrelated, such as footnotes, buttons, information that is not relevant to the article or Or information about seeing any other articles made by the author.
-                                                                                """)
-    prompt_value = prompt_temp.format(docstext= docs)
-    llm_openai = OpenAI(model_name = "gpt-3.5-turbo-16k", temperature=0, openai_api_key = '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')
-    respuesta_openai = llm_openai(prompt_value)
-    return respuesta_openai
-
-st.set_page_config( page_title="Kalungi Ai-rticle", layout="wide")
-st.header(":blue[Please provide us with the article you'd like to work with.]")
-
-article = st.text_area(label = "", placeholder = "Please enter the text or URL of the article here.", key = "article_imput")
-
 if article:
   articleevaluated = get_true_or_false_article(article)
 
@@ -97,7 +79,24 @@ if article:
     answertoneauthor = get_tone_author(blogarticle)
     st.write("Author:\n\n"+answertoneauthor)
   else:
+    def get_datablog(article):
+        articleurl = f"{article}"
+        headers = {'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:80.0) Gecko/20100101 Firefox/80.0'}
+        loader = UnstructuredURLLoader(urls=[articleurl], headers=headers, ssl_verify=False)
+        return loader.load()
 
+    def get_article(article):
+        dataarticleurl = get_datablog(article)
+        text_splitter = RecursiveCharacterTextSplitter(chunk_size = 800, chunk_overlap = 0)
+        docs = text_splitter.split_documents(dataarticleurl)
+
+        prompt_temp = PromptTemplate(input_variables = ["docstext"], template = """ for this data = {docstext}
+                                                                                - Extract the title of the article and all the content of the article (Leave a line between paragraphs every time you come across \n\n), excluding things that are unrelated, such as footnotes, buttons, information that is not relevant to the article or Or information about seeing any other articles made by the author.
+                                                                                """)
+        prompt_value = prompt_temp.format(docstext= docs)
+        llm_openai = OpenAI(model_name = "gpt-3.5-turbo-16k", temperature=0, openai_api_key = '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')
+        respuesta_openai = llm_openai(prompt_value)
+        return respuesta_openai
     blogarticle = get_article(article)
     st.write("Su Articulo es este:\n\n"+blogarticle)
     st.write("---\n\n")
