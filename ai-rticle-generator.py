@@ -1,10 +1,14 @@
 import streamlit as st
+import os
 from langchain.llms import OpenAI
 from langchain.prompts import PromptTemplate
 from langchain.chat_models import ChatOpenAI
 from langchain.document_loaders import UnstructuredURLLoader
 from langchain.chains.summarize import load_summarize_chain
 from langchain.text_splitter import RecursiveCharacterTextSplitter
+import requests
+from bs4 import BeautifulSoup
+from markdownify import markdownify as md
 
 
 st.set_page_config( page_title="Kalungi Ai-rticle", layout="wide")
@@ -84,12 +88,56 @@ def get_tone_author(blogarticle):
     toneauthor = llm_openai(prompt_value)
     return toneauthor
     
+#def get_datablog(article):
+#    articleurl = f"{article}"
+#    headers = {'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:80.0) Gecko/20100101 Firefox/80.0'}
+#    loader = UnstructuredURLLoader(urls=[articleurl], headers=headers, ssl_verify=False)
+#    return loader.load()
+    
 def get_datablog(article):
-    articleurl = f"{article}"
-    headers = {'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:80.0) Gecko/20100101 Firefox/80.0'}
-    loader = UnstructuredURLLoader(urls=[articleurl], headers=headers, ssl_verify=False)
-    return loader.load()
 
+    # Doing a try in case it doesn't work
+    try:
+        response = requests.get(article)
+    except:
+        # In case it doesn't work
+        print ("Whoops, error")
+        return
+
+    # Put your response in a beautiful soup
+    soup = BeautifulSoup(response.text, 'html.parser')
+
+    # Get your text
+    text = soup.get_text()
+
+    # Convert your html to markdown. This reduces tokens and noise
+    text = md(text)
+
+    template="""
+
+    % INSTRUCTIONS
+     - You are an AI Bot that is very good at extracting blogs from websites.
+     - You will receive raw text with markdowns from a webpage
+     - Parse through the data and return only the blog post including both title and body
+     - Do not answer anything other than the blog post
+
+    % Website Data:
+    {text}
+
+    % Your Output
+    """
+
+    prompt = PromptTemplate(
+    input_variables=["text"],
+    template=template,
+    )
+
+    final_prompt = prompt.format(text=text)
+    llm_openai = OpenAI(model_name = "gpt-3.5-turbo-16k", temperature=0, openai_api_key = openai_api_key_input)
+    output = llm_openai.predict(final_prompt)
+    
+    return output
+    
 def get_article(article):
     dataarticleurl = get_datablog(article)
     text_splitter = RecursiveCharacterTextSplitter(chunk_size = 800, chunk_overlap = 0)
@@ -116,7 +164,7 @@ if article:
     answertoneauthor = get_tone_author(blogarticle)
     st.write("Author:\n\n"+answertoneauthor)
   else:
-    blogarticle = get_article(article)
+    blogarticle = get_datablog(article)
     st.write("Su Articulo es este:\n\n"+blogarticle)
     st.write("---\n\n")
     answertone = get_authors_tone_description(how_to_describe_tone, blogarticle)
