@@ -91,7 +91,7 @@ if article:
     blogarticle = article
     st.write("Su Articulo es este:\n\n"+blogarticle)
     st.write("---\n\n")
-    answertone = get_tone_article(blogarticle)
+    answertone = get_authors_tone_description(how_to_describe_tone, blogarticle)
     st.write("Tono del articulo:\n\n"+answertone)
     st.write("---\n\n")
     answertoneauthor = get_tone_author(blogarticle)
@@ -118,7 +118,7 @@ if article:
     blogarticle = get_article(article)
     st.write("Su Articulo es este:\n\n"+blogarticle)
     st.write("---\n\n")
-    answertone = get_tone_article(blogarticle)
+    answertone = get_authors_tone_description(how_to_describe_tone, blogarticle)
     st.write("Tono del articulo:\n\n"+answertone)
     st.write("---\n\n")
     answertoneauthor = get_tone_author(blogarticle)
