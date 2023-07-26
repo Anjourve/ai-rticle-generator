@@ -10,6 +10,7 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 st.set_page_config( page_title="Kalungi Ai-rticle", layout="wide")
 st.header(":blue[Please provide us with the article you'd like to work with.]")
 
+openai_api_key_input = st.text_area(label = "", placeholder = "Please enter the API OpenAI.", key = "openai_api_key_input")
 article = st.text_area(label = "", placeholder = "Please enter the text or URL of the article here.", key = "article_imput")
 
 def get_true_or_false_article(article):
