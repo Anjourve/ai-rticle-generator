@@ -83,7 +83,26 @@ def get_tone_author(blogarticle):
     llm_openai = OpenAI(model_name = "gpt-3.5-turbo-16k", temperature=0, openai_api_key = openai_api_key_input)
     toneauthor = llm_openai(prompt_value)
     return toneauthor
+    
+def get_datablog(article):
+    articleurl = f"{article}"
+    headers = {'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:80.0) Gecko/20100101 Firefox/80.0'}
+    loader = UnstructuredURLLoader(urls=[articleurl], headers=headers, ssl_verify=False)
+    return loader.load()
 
+def get_article(article):
+    dataarticleurl = get_datablog(article)
+    text_splitter = RecursiveCharacterTextSplitter(chunk_size = 800, chunk_overlap = 0)
+    docs = text_splitter.split_documents(dataarticleurl)
+
+    prompt_temp = PromptTemplate(input_variables = ["docstext"], template = """ for this data = {docstext}
+                                                                                - Extract the title of the article and all the content of the article (Leave a line between paragraphs every time you come across \n\n), excluding things that are unrelated, such as footnotes, buttons, information that is not relevant to the article or Or information about seeing any other articles made by the author.
+                                                                                """)
+    prompt_value = prompt_temp.format(docstext= docs)
+    llm_openai = OpenAI(model_name = "gpt-3.5-turbo-16k", temperature=0, openai_api_key = openai_api_key_input)
+    respuesta_openai = llm_openai(prompt_value)
+    return respuesta_openai
+    
 if article:
   articleevaluated = get_true_or_false_article(article)
 
@@ -97,24 +116,6 @@ if article:
     answertoneauthor = get_tone_author(blogarticle)
     st.write("Author:\n\n"+answertoneauthor)
   else:
-    def get_datablog(article):
-        articleurl = f"{article}"
-        headers = {'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:80.0) Gecko/20100101 Firefox/80.0'}
-        loader = UnstructuredURLLoader(urls=[articleurl], headers=headers, ssl_verify=False)
-        return loader.load()
-
-    def get_article(article):
-        dataarticleurl = get_datablog(article)
-        text_splitter = RecursiveCharacterTextSplitter(chunk_size = 800, chunk_overlap = 0)
-        docs = text_splitter.split_documents(dataarticleurl)
-
-        prompt_temp = PromptTemplate(input_variables = ["docstext"], template = """ for this data = {docstext}
-                                                                                - Extract the title of the article and all the content of the article (Leave a line between paragraphs every time you come across \n\n), excluding things that are unrelated, such as footnotes, buttons, information that is not relevant to the article or Or information about seeing any other articles made by the author.
-                                                                                """)
-        prompt_value = prompt_temp.format(docstext= docs)
-        llm_openai = OpenAI(model_name = "gpt-3.5-turbo-16k", temperature=0, openai_api_key = openai_api_key_input)
-        respuesta_openai = llm_openai(prompt_value)
-        return respuesta_openai
     blogarticle = get_article(article)
     st.write("Su Articulo es este:\n\n"+blogarticle)
     st.write("---\n\n")
