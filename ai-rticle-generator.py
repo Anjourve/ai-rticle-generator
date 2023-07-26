@@ -69,7 +69,7 @@ def get_authors_tone_description(how_to_describe_tone, blogarticle):
     )
 
     final_prompt = prompt.format(how_to_describe_tone=how_to_describe_tone, blog=blogarticle)
-
+    llm_openai = OpenAI(model_name = "gpt-3.5-turbo-16k", temperature=.7, openai_api_key = openai_api_key_input)
     tonearticle = llm_openai.predict(final_prompt)
 
     return tonearticle
