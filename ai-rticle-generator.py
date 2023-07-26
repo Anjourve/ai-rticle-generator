@@ -135,6 +135,25 @@ def get_datablog(article):
     final_prompt = prompt.format(text=text)
     llm_openai = OpenAI(model_name = "gpt-3.5-turbo-16k", temperature=0, openai_api_key = openai_api_key_input)
     output = llm_openai.predict(final_prompt)
+
+    template="""
+    Act as blog formatter GPT
+    Take on the following blog and add header and title tags whre you think appropiate;.
+
+    {text}
+
+    % Your Output
+    """
+    prompt = PromptTemplate(
+        input_variables=["text"],
+        template=template,
+    )    
+
+    final_prompt = prompt.format(text=output)
+
+    print (final_prompt)
+
+    output = llm_openai.predict(final_prompt)
     
     return output
     
