@@ -154,7 +154,7 @@ def get_datablog(article):
 def header_and_title_tags(article):
     template="""
     Act as blog formatter GPT
-    Take on the following blog and add header, leading and title tags where you think appropiate;.
+    Take on the following blog and add header and title tags where you think appropiate;.
 
     {text}
 
