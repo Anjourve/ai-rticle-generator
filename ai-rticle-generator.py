@@ -187,9 +187,9 @@ def header_and_title_tags(article):
 with st.form('myform'):
   topic_text = st.text_input('Please enter the text or URL of the article here.:', '')
   submitted = st.form_submit_button('Submit')
-  if not openai_api_key.startswith('sk-'):
+  if not openai_api_key_input.startswith('sk-'):
     st.warning('Please enter your OpenAI API key!', icon='⚠')
-  if submitted and openai_api_key.startswith('sk-'):
+  if submitted and openai_api_key_input.startswith('sk-'):
     
     if article:
       articleevaluated = get_true_or_false_article(article)
