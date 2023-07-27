@@ -201,6 +201,7 @@ def generate_new_outline(responseoutline):
     % INSTRUCTIONS
      - As an experienced data scientist and technical writer. 
      - Generate a new outline based on this last outline.
+     - Do not mention authors.
      - Do not answer anything other than the outline.
 
     % last outline:
