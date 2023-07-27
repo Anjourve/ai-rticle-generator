@@ -195,7 +195,7 @@ def generate_outline(blogarticle):
 
     return response_outline
 
-def generate_outline(responseoutline):
+def generate_new_outline(responseoutline):
     template ="""
 
     % INSTRUCTIONS
@@ -255,7 +255,7 @@ with st.form('myform'):
       st.write("---\n\n")
       responseoutline = generate_outline(blogarticle)
       st.info("Outline:\n\n"+responseoutline)
-      new_response_outline = generate_outline(responseoutline)
+      new_response_outline = generate_new_outline(responseoutline)
       st.info("Outline:\n\n"+new_response_outline)
 
       
