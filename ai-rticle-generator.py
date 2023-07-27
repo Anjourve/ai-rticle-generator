@@ -218,7 +218,7 @@ def generate_new_outline(responseoutline):
 
     return new_response_outline
 
-def generate_new_article_with_outline(template, answertone, answertoneauthor, new_response_outline):
+def generate_new_article_with_outline(answertone, answertoneauthor, new_response_outline):
     template_new_article = """
     % INSTRUCTIONS
      - You are an AI Bot that is very good at mimicking an author writing style.
@@ -292,6 +292,6 @@ with st.form('myform'):
       new_response_outline = generate_new_outline(responseoutline)
       st.info("New Outline:\n\n"+new_response_outline)
       st.write("---\n\n")
-      new_article = generate_new_article_with_outline(template, answertone, answertoneauthor, new_response_outline)
+      new_article = generate_new_article_with_outline(answertone, answertoneauthor, new_response_outline)
       st.info("New Article:\n\n"+new_article)
       
