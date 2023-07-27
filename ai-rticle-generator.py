@@ -219,7 +219,7 @@ def generate_new_outline(responseoutline):
     return new_response_outline
 
 def generate_new_article_with_outline(template, answertone, answertoneauthor, new_response_outline):
-    template = """
+    template_new_article = """
     % INSTRUCTIONS
      - You are an AI Bot that is very good at mimicking an author writing style.
      - Your goal is to write content with the tone that is described below.
@@ -239,10 +239,8 @@ def generate_new_article_with_outline(template, answertone, answertoneauthor, ne
     1st - Write an article, following the outline to be used.
     2nd - Take on the following article and add header and title tags where you think appropiate as if you were the author described above;.
     """
-    method_4_prompt_template = PromptTemplate(
-    input_variables=["answertoneauthor", "answertone", "new_response_outline"],
-    template=template,
-    )
+    method_4_prompt_template = PromptTemplate(input_variables=["answertoneauthor", "answertone", "new_response_outline"],template=template_new_article)
+    
     final_prompt = method_4_prompt_template.format(answertoneauthor=answertoneauthor,
                                                    answertone=answertone,
                                                    new_response_outline=new_response_outline)
