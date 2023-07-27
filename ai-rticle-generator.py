@@ -235,10 +235,8 @@ with st.form('myform'):
       responseoutline = generate_outline(blogarticle)
       st.info("Outline:\n\n"+responseoutline)
 
-
-      with st.form('myform'):
-          submitted = st.form_submit_button('Generate New Outline')
-          if not openai_api_key_input.startswith('sk-'):
-            st.warning('Please enter your OpenAI API key!', icon='⚠')
-          if submitted:
-              st.write("wiiii")
+      submitted = st.form_submit_button('Generate New Outline')
+      if not openai_api_key_input.startswith('sk-'):
+        st.warning('Please enter your OpenAI API key!', icon='⚠')
+      if submitted:
+        st.write("wiiii")
