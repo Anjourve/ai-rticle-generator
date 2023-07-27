@@ -76,7 +76,7 @@ def get_authors_tone_description(how_to_describe_tone, blogarticle):
     llm_openai = OpenAI(model_name = "gpt-4", temperature=.7, openai_api_key = openai_api_key_input)
     tonearticle = llm_openai.predict(final_prompt)
 
-    return tonearticle
+    return st.info(tonearticle)
 
 def get_similar_public_figures(blogarticle):
     template = """
@@ -99,7 +99,7 @@ def get_similar_public_figures(blogarticle):
     final_prompt = prompt.format(examples=blogarticle)
     llm_openai = OpenAI(model_name = "gpt-4", temperature=.7, openai_api_key = openai_api_key_input)
     authors = llm_openai.predict(final_prompt)
-    return authors
+    return st.info(authors)
     
 #def get_datablog(article):
 #    articleurl = f"{article}"
@@ -149,7 +149,7 @@ def get_datablog(article):
     llm_openai = OpenAI(model_name = "gpt-4", temperature=.7, openai_api_key = openai_api_key_input)
     datablog = llm_openai.predict(final_prompt)
     
-    return datablog
+    return st.info(datablog)
 
 def header_and_title_tags(article):
     template="""
@@ -170,7 +170,7 @@ def header_and_title_tags(article):
     llm_openai = OpenAI(model_name = "gpt-4", temperature=.7, openai_api_key = openai_api_key_input)
     output = llm_openai.predict(final_prompt)
     
-    return output
+    return st.info(output)
 
 #def get_article(article):
 #    dataarticleurl = get_datablog(article)
