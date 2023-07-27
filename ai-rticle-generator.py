@@ -78,16 +78,6 @@ def get_authors_tone_description(how_to_describe_tone, blogarticle):
 
     return tonearticle
 
-def get_tone_author(blogarticle):
-
-    prompt_temp = PromptTemplate(input_variables = ["docstext"], template = """ You are an AI Bot that is very good at identifying authors, public figures, or writers whos style matches a piece of text. Be opinionated and have an active voice. Take a firm stance with your response.
-                                                                                Respond with only the full name (list up to 4 full name if necessary) of the author, public figure, or writer that sounds most closely resemble following text:
-                                                                                {docstext}""")
-    prompt_value = prompt_temp.format(docstext = blogarticle)
-    llm_openai = OpenAI(model_name = "gpt-4", temperature=.7, openai_api_key = openai_api_key_input)
-    toneauthor = llm_openai(prompt_value)
-    return toneauthor
-
 def get_similar_public_figures(blogarticle):
     template = """
     You are an AI Bot that is very good at identifying authors, public figures, or writers whos style matches a piece of text
@@ -204,10 +194,8 @@ if article:
     answertone = get_authors_tone_description(how_to_describe_tone, blogarticle)
     st.write("Tone Description:\n\n"+answertone)
     st.write("---\n\n")
-    answertoneauthor = get_tone_author(blogarticle)
-    st.write("Author:\n\n"+answertoneauthor)
     answertone = get_similar_public_figures(blogarticle)
-    st.write("Other Author:\n\n"+answertoneauthor)
+    st.write("Author:\n\n"+answertoneauthor)
   else:
     data = get_datablog(article)
     blogarticle = header_and_title_tags(data)
@@ -216,7 +204,5 @@ if article:
     answertone = get_authors_tone_description(how_to_describe_tone, blogarticle)
     st.write("Tone Description:\n\n"+answertone)
     st.write("---\n\n")
-    answertoneauthor = get_tone_author(blogarticle)
-    st.write("Author:\n\n"+answertoneauthor)
     answertone = get_similar_public_figures(blogarticle)
-    st.write("Other Author:\n\n"+answertoneauthor)
+    st.write("Author:\n\n"+answertoneauthor)
