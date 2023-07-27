@@ -173,22 +173,16 @@ def header_and_title_tags(article):
     return output
 
 def generate_outline(blogarticle):
-    template = #"""As an experienced data scientist and technical writer, generate an outline for this blog;.
-    
-    #{topic}.
-    
-    #% Your Output
-    #"""
-
-    """
+    template ="""
 
     % INSTRUCTIONS
      - As an experienced data scientist and technical writer.
      - Generate an outline for this blog.
      - Take the <h1>, <h2>, and <h3> to generate the outline.
+     - Do not answer anything other than the outline
 
     % blog:
-    {text}
+    {topic}.
 
     % Your Output
     """
