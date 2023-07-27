@@ -12,7 +12,7 @@ from markdownify import markdownify as md
 
 
 st.set_page_config( page_title="Kalungi Ai-rticle", layout="wide")
-st.header(":blue[Please provide us with the article you'd like to work with.]")
+#st.header(":blue[Please provide us with the article you'd like to work with.]")
 openai_api_key_input = st.sidebar.text_input('OpenAI API Key', type='password')
 
 #article = st.text_area(label = "", placeholder = "Please enter the text or URL of the article here.", key = "article_imput")
@@ -185,7 +185,7 @@ def header_and_title_tags(article):
 #    return respuesta_openai
 
 with st.form('myform'):
-  topic_text = st.text_input('Please enter the text or URL of the article here.:', '')
+  article = st.text_input('Please enter the text or URL of the article here.:', '')
   submitted = st.form_submit_button('Submit')
   if not openai_api_key_input.startswith('sk-'):
     st.warning('Please enter your OpenAI API key!', icon='⚠')
