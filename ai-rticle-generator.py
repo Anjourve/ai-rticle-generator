@@ -217,6 +217,40 @@ def generate_new_outline(responseoutline):
     new_response_outline = llm_openai(prompt_query)
 
     return new_response_outline
+
+def generate_new_outline(template, answertone, answertoneauthor, new_response_outline):
+    template = """
+    % INSTRUCTIONS
+     - You are an AI Bot that is very good at mimicking an author writing style.
+     - Your goal is to write content with the tone that is described below.
+     - Do not go outside the tone instructions below
+
+    % Mimic These Authors:
+    {answertoneauthor}
+
+    % Description of the authors tone:
+    {answertone}
+
+    % outline to use
+    {new_response_outline}
+    % End of outline to use
+
+    % YOUR TASK
+    1st - Write an article, following the outline to be used.
+    2nd - Take on the following article and add header and title tags where you think appropiate as if you were the author described above;.
+    """
+    method_4_prompt_template = PromptTemplate(
+    input_variables=["answertoneauthor", "answertone", "new_response_outline"],
+    template=template,
+    )
+    final_prompt = method_4_prompt_template.format(answertoneauthor=answertoneauthor,
+                                                   answertone=answertone,
+                                                   new_response_outline=new_response_outline)
+    llm_openai = OpenAI(model_name = "gpt-4", temperature=.7, openai_api_key = openai_api_key_input)
+    new_article = llm_openai.predict(final_prompt)
+
+    return new_article
+    
 #def get_article(article):
 #    dataarticleurl = get_datablog(article)
 #    text_splitter = RecursiveCharacterTextSplitter(chunk_size = 800, chunk_overlap = 0)
@@ -259,5 +293,7 @@ with st.form('myform'):
       st.write("---\n\n")
       new_response_outline = generate_new_outline(responseoutline)
       st.info("New Outline:\n\n"+new_response_outline)
-
+      st.write("---\n\n")
+      new_article = generate_new_outline(template, answertone, answertoneauthor, new_response_outline)
+      st.info("New Article:\n\n"+new_article)
       
