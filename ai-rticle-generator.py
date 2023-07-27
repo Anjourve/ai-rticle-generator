@@ -9,7 +9,7 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 import requests
 from bs4 import BeautifulSoup
 from markdownify import markdownify as md
-
+ 
 
 st.set_page_config( page_title="Kalungi Ai-rticle", layout="wide")
 #st.header(":blue[Please provide us with the article you'd like to work with.]")
