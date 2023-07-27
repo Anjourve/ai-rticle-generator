@@ -194,7 +194,28 @@ def generate_outline(blogarticle):
     response_outline = llm_openai(prompt_query)
 
     return response_outline
+
+def generate_outline(responseoutline):
+    template ="""
+
+    % INSTRUCTIONS
+     - As an experienced data scientist and technical writer. 
+     - Generate a new outline based on this last outline.
+     - Do not answer anything other than the outline.
+
+    % last outline:
+    {topic}.
+
+    % Your Output
+    """
     
+    prompt = PromptTemplate(input_variables=['topic'], template=template)
+
+    prompt_query = prompt.format(topic=responseoutline)
+    llm_openai = OpenAI(model_name = "gpt-4", temperature=.7, openai_api_key = openai_api_key_input)
+    new_response_outline = llm_openai(prompt_query)
+
+    return new_response_outline
 #def get_article(article):
 #    dataarticleurl = get_datablog(article)
 #    text_splitter = RecursiveCharacterTextSplitter(chunk_size = 800, chunk_overlap = 0)
@@ -234,9 +255,7 @@ with st.form('myform'):
       st.write("---\n\n")
       responseoutline = generate_outline(blogarticle)
       st.info("Outline:\n\n"+responseoutline)
+      new_response_outline = generate_outline(responseoutline)
+      st.info("Outline:\n\n"+new_response_outline)
 
-      submitted = st.form_submit_button('Generate New Outline')
-      if not openai_api_key_input.startswith('sk-'):
-        st.warning('Please enter your OpenAI API key!', icon='⚠')
-      if submitted:
-        st.header(":blue[Wiiiiii]")
+      
