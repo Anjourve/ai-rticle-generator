@@ -254,8 +254,9 @@ with st.form('myform'):
       st.info("Author:\n\n"+answertoneauthor)
       st.write("---\n\n")
       responseoutline = generate_outline(blogarticle)
-      st.info("Outline:\n\n"+responseoutline)
+      st.info("Outline:\n\n"+responseoutline)      
+      st.write("---\n\n")
       new_response_outline = generate_new_outline(responseoutline)
-      st.info("Outline:\n\n"+new_response_outline)
+      st.info("New Outline:\n\n"+new_response_outline)
 
       
