@@ -239,4 +239,4 @@ with st.form('myform'):
       if not openai_api_key_input.startswith('sk-'):
         st.warning('Please enter your OpenAI API key!', icon='⚠')
       if submitted:
-        st.write("wiiii")
+        print("wiiii")
