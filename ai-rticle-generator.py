@@ -134,9 +134,9 @@ def get_datablog(article):
 
     final_prompt = prompt.format(text=text)
     llm_openai = OpenAI(model_name = "gpt-4", temperature=.7, openai_api_key = openai_api_key_input)
-    output = llm_openai.predict(final_prompt)
+    datablog = llm_openai.predict(final_prompt)
     
-    return output
+    return datablog
 
 def header_and_title_tags(article):
     template="""
@@ -152,7 +152,7 @@ def header_and_title_tags(article):
         template=template,
     )    
 
-    final_prompt = prompt.format(text=output)
+    final_prompt = prompt.format(text=article)
 
     llm_openai = OpenAI(model_name = "gpt-4", temperature=.7, openai_api_key = openai_api_key_input)
     output = llm_openai.predict(final_prompt)
