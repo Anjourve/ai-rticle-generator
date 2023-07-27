@@ -15,7 +15,7 @@ st.set_page_config( page_title="Kalungi Ai-rticle", layout="wide")
 st.header(":blue[Please provide us with the article you'd like to work with.]")
 openai_api_key_input = st.sidebar.text_input('OpenAI API Key', type='password')
 
-article = st.text_area(label = "", placeholder = "Please enter the text or URL of the article here.", key = "article_imput")
+#article = st.text_area(label = "", placeholder = "Please enter the text or URL of the article here.", key = "article_imput")
 
 
 def get_true_or_false_article(article):
@@ -183,26 +183,33 @@ def header_and_title_tags(article):
 #    prompt_value = prompt_temp.format(docstext= docs)
 #    respuesta_openai = llm_openai(prompt_value)
 #    return respuesta_openai
-    
-if article:
-  articleevaluated = get_true_or_false_article(article)
 
-  if articleevaluated == "TRUE":
-    blogarticle = header_and_title_tags(article)
-    st.info("Article:\n\n"+blogarticle)
-    st.write("---\n\n")
-    answertone = get_authors_tone_description(how_to_describe_tone, blogarticle)
-    st.info("Tone Description:\n\n"+answertone)
-    st.write("---\n\n")
-    answertoneauthor = get_similar_public_figures(blogarticle)
-    st.info("Author:\n\n"+answertoneauthor)
-  else:
-    data = get_datablog(article)
-    blogarticle = header_and_title_tags(data)
-    st.info("Article:\n\n"+blogarticle)
-    st.write("---\n\n")
-    answertone = get_authors_tone_description(how_to_describe_tone, blogarticle)
-    st.info("Tone Description:\n\n"+answertone)
-    st.write("---\n\n")
-    answertoneauthor = get_similar_public_figures(blogarticle)
-    st.info("Author:\n\n"+answertoneauthor)
+with st.form('myform'):
+  topic_text = st.text_input('Please enter the text or URL of the article here.:', '')
+  submitted = st.form_submit_button('Submit')
+  if not openai_api_key.startswith('sk-'):
+    st.warning('Please enter your OpenAI API key!', icon='⚠')
+  if submitted and openai_api_key.startswith('sk-'):
+    
+    if article:
+      articleevaluated = get_true_or_false_article(article)
+
+      if articleevaluated == "TRUE":
+        blogarticle = header_and_title_tags(article)
+        st.info("Article:\n\n"+blogarticle)
+        st.write("---\n\n")
+        answertone = get_authors_tone_description(how_to_describe_tone, blogarticle)
+        st.info("Tone Description:\n\n"+answertone)
+        st.write("---\n\n")
+        answertoneauthor = get_similar_public_figures(blogarticle)
+        st.info("Author:\n\n"+answertoneauthor)
+      else:
+        data = get_datablog(article)
+        blogarticle = header_and_title_tags(data)
+        st.info("Article:\n\n"+blogarticle)
+        st.write("---\n\n")
+        answertone = get_authors_tone_description(how_to_describe_tone, blogarticle)
+        st.info("Tone Description:\n\n"+answertone)
+        st.write("---\n\n")
+        answertoneauthor = get_similar_public_figures(blogarticle)
+        st.info("Author:\n\n"+answertoneauthor)
