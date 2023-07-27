@@ -17,13 +17,13 @@ st.header(":blue[Please provide us with the article you'd like to work with.]")
 openai_api_key_input = st.text_area(label = "", placeholder = "Please enter the API OpenAI.", key = "openai_api_key_input")
 article = st.text_area(label = "", placeholder = "Please enter the text or URL of the article here.", key = "article_imput")
 
+llm_openai = OpenAI(model_name = "gpt-3.5-turbo-16k", temperature=.7, openai_api_key = openai_api_key_input)
+
 def get_true_or_false_article(article):
     prompt_temp = PromptTemplate(input_variables = ["dataarticle"], template = """ for this text = {dataarticle}
                                                                                - If the text is a URL, it returns "FALSE"; otherwise, it returns "TRUE".
                                                                                """)
     prompt_value = prompt_temp.format(dataarticle= article)
-
-    llm_openai = OpenAI(model_name = "gpt-3.5-turbo-16k", temperature=0, openai_api_key = openai_api_key_input)
     respuesta_openai = llm_openai(prompt_value)
     return respuesta_openai
 
@@ -73,7 +73,6 @@ def get_authors_tone_description(how_to_describe_tone, blogarticle):
     )
 
     final_prompt = prompt.format(how_to_describe_tone=how_to_describe_tone, blog=blogarticle)
-    llm_openai = OpenAI(model_name = "gpt-3.5-turbo-16k", temperature=.7, openai_api_key = openai_api_key_input)
     tonearticle = llm_openai.predict(final_prompt)
 
     return tonearticle
@@ -84,7 +83,6 @@ def get_tone_author(blogarticle):
                                                                                 Respond with only the full name (list up to 4 full name if necessary) of the author, public figure, or writer that sounds most closely resemble following text:
                                                                                 {docstext}""")
     prompt_value = prompt_temp.format(docstext = blogarticle)
-    llm_openai = OpenAI(model_name = "gpt-3.5-turbo-16k", temperature=0, openai_api_key = openai_api_key_input)
     toneauthor = llm_openai(prompt_value)
     return toneauthor
     
@@ -133,61 +131,62 @@ def get_datablog(article):
     )
 
     final_prompt = prompt.format(text=text)
-    llm_openai = OpenAI(model_name = "gpt-3.5-turbo-16k", temperature=0, openai_api_key = openai_api_key_input)
     output = llm_openai.predict(final_prompt)
     
     return output
 
-#    template="""
-#    Act as blog formatter GPT
-#    Take on the following blog and add header and title tags whre you think appropiate;.
+def header_and_title_tags(article):
+    template="""
+    Act as blog formatter GPT
+    Take on the following blog and add header and title tags whre you think appropiate;.
 
-#    {text}
+    {text}
 
-#    % Your Output
-#    """
-#    prompt = PromptTemplate(
-#        input_variables=["text"],
-#        template=template,
-#    )    
+    % Your Output
+    """
+    prompt = PromptTemplate(
+        input_variables=["text"],
+        template=template,
+    )    
 
-#    final_prompt = prompt.format(text=output)
+    final_prompt = prompt.format(text=output)
 
-#    print (final_prompt)
-
-#    output = llm_openai.predict(final_prompt)
+    print (final_prompt)
+    output = llm_openai.predict(final_prompt)
     
-def get_article(article):
-    dataarticleurl = get_datablog(article)
-    text_splitter = RecursiveCharacterTextSplitter(chunk_size = 800, chunk_overlap = 0)
-    docs = text_splitter.split_documents(dataarticleurl)
+    return output
 
-    prompt_temp = PromptTemplate(input_variables = ["docstext"], template = """ for this data = {docstext}
-                                                                                - Extract the title of the article and all the content of the article (Leave a line between paragraphs every time you come across \n\n), excluding things that are unrelated, such as footnotes, buttons, information that is not relevant to the article or Or information about seeing any other articles made by the author.
-                                                                                """)
-    prompt_value = prompt_temp.format(docstext= docs)
-    llm_openai = OpenAI(model_name = "gpt-3.5-turbo-16k", temperature=0, openai_api_key = openai_api_key_input)
-    respuesta_openai = llm_openai(prompt_value)
-    return respuesta_openai
+#def get_article(article):
+#    dataarticleurl = get_datablog(article)
+#    text_splitter = RecursiveCharacterTextSplitter(chunk_size = 800, chunk_overlap = 0)
+#    docs = text_splitter.split_documents(dataarticleurl)
+
+#    prompt_temp = PromptTemplate(input_variables = ["docstext"], template = """ for this data = {docstext}
+#                                                                                - Extract the title of the article and all the content of the article (Leave a line between paragraphs every time you come across \n\n), excluding things that are unrelated, such as footnotes, buttons, information that is not relevant to the article or Or information about seeing any other articles made by the author.
+#                                                                                """)
+#    prompt_value = prompt_temp.format(docstext= docs)
+#    respuesta_openai = llm_openai(prompt_value)
+#    return respuesta_openai
     
 if article:
   articleevaluated = get_true_or_false_article(article)
 
   if articleevaluated == "TRUE":
-    blogarticle = article
-    st.write("Su Articulo es este:\n\n"+blogarticle)
+    blogarticle = header_and_title_tags(article)
+    st.write("Article:\n\n"+blogarticle)
     st.write("---\n\n")
     answertone = get_authors_tone_description(how_to_describe_tone, blogarticle)
-    st.write("Tono del articulo:\n\n"+answertone)
+    st.write("Tone Description:\n\n"+answertone)
     st.write("---\n\n")
     answertoneauthor = get_tone_author(blogarticle)
     st.write("Author:\n\n"+answertoneauthor)
   else:
-    blogarticle = get_datablog(article)
-    st.write("Su Articulo es este:\n\n"+blogarticle)
+    data = get_datablog(article)
+    blogarticle = header_and_title_tags(data)
+    st.write("Article:\n\n"+blogarticle)
     st.write("---\n\n")
     answertone = get_authors_tone_description(how_to_describe_tone, blogarticle)
-    st.write("Tono del articulo:\n\n"+answertone)
+    st.write("Tone Description:\n\n"+answertone)
     st.write("---\n\n")
     answertoneauthor = get_tone_author(blogarticle)
     st.write("Author:\n\n"+answertoneauthor)
