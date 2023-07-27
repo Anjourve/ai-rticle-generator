@@ -17,13 +17,13 @@ st.header(":blue[Please provide us with the article you'd like to work with.]")
 openai_api_key_input = st.text_area(label = "", placeholder = "Please enter the API OpenAI.", key = "openai_api_key_input")
 article = st.text_area(label = "", placeholder = "Please enter the text or URL of the article here.", key = "article_imput")
 
-llm_openai = OpenAI(model_name = "gpt-3.5-turbo-16k", temperature=.7, openai_api_key = openai_api_key_input)
 
 def get_true_or_false_article(article):
     prompt_temp = PromptTemplate(input_variables = ["dataarticle"], template = """ for this text = {dataarticle}
                                                                                - If the text is a URL, it returns "FALSE"; otherwise, it returns "TRUE".
                                                                                """)
     prompt_value = prompt_temp.format(dataarticle= article)
+    llm_openai = OpenAI(model_name = "gpt-4", temperature=.7, openai_api_key = openai_api_key_input)
     respuesta_openai = llm_openai(prompt_value)
     return respuesta_openai
 
@@ -73,6 +73,7 @@ def get_authors_tone_description(how_to_describe_tone, blogarticle):
     )
 
     final_prompt = prompt.format(how_to_describe_tone=how_to_describe_tone, blog=blogarticle)
+    llm_openai = OpenAI(model_name = "gpt-4", temperature=.7, openai_api_key = openai_api_key_input)
     tonearticle = llm_openai.predict(final_prompt)
 
     return tonearticle
@@ -83,6 +84,7 @@ def get_tone_author(blogarticle):
                                                                                 Respond with only the full name (list up to 4 full name if necessary) of the author, public figure, or writer that sounds most closely resemble following text:
                                                                                 {docstext}""")
     prompt_value = prompt_temp.format(docstext = blogarticle)
+    llm_openai = OpenAI(model_name = "gpt-4", temperature=.7, openai_api_key = openai_api_key_input)
     toneauthor = llm_openai(prompt_value)
     return toneauthor
     
@@ -131,6 +133,7 @@ def get_datablog(article):
     )
 
     final_prompt = prompt.format(text=text)
+    llm_openai = OpenAI(model_name = "gpt-4", temperature=.7, openai_api_key = openai_api_key_input)
     output = llm_openai.predict(final_prompt)
     
     return output
@@ -151,7 +154,7 @@ def header_and_title_tags(article):
 
     final_prompt = prompt.format(text=output)
 
-    print (final_prompt)
+    llm_openai = OpenAI(model_name = "gpt-4", temperature=.7, openai_api_key = openai_api_key_input)
     output = llm_openai.predict(final_prompt)
     
     return output
