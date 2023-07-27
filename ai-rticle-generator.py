@@ -226,6 +226,7 @@ with st.form('myform'):
         st.write("---\n\n")
         answertoneauthor = get_similar_public_figures(blogarticle)
         st.info("Author:\n\n"+answertoneauthor)
+        st.write("---\n\n")
         responseoutline = generate_outline(blogarticle)
         st.info("Outline:\n\n"+responseoutline)
       else:
@@ -238,5 +239,6 @@ with st.form('myform'):
         st.write("---\n\n")
         answertoneauthor = get_similar_public_figures(blogarticle)
         st.info("Author:\n\n"+answertoneauthor)
+        st.write("---\n\n")
         responseoutline = generate_outline(blogarticle)
         st.info("Outline:\n\n"+responseoutline)
