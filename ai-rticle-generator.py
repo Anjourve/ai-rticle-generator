@@ -172,6 +172,21 @@ def header_and_title_tags(article):
     
     return output
 
+def generate_outline(blogarticle):
+    template = """As an experienced data scientist and technical writer, generate an outline for this blog;.
+    
+    {topic}.
+    
+    % Your Output
+    """
+    prompt = PromptTemplate(input_variables=['topic'], template=template)
+
+    prompt_query = prompt.format(topic=blogarticle)
+    llm_openai = OpenAI(model_name = "gpt-4", temperature=.7, openai_api_key = openai_api_key_input)
+    response_outline = llm_openai(prompt_query)
+
+    return response_outline
+    
 #def get_article(article):
 #    dataarticleurl = get_datablog(article)
 #    text_splitter = RecursiveCharacterTextSplitter(chunk_size = 800, chunk_overlap = 0)
@@ -203,6 +218,8 @@ with st.form('myform'):
         st.write("---\n\n")
         answertoneauthor = get_similar_public_figures(blogarticle)
         st.info("Author:\n\n"+answertoneauthor)
+        responseoutline = generate_outline(blogarticle)
+        st.info("Outline:\n\n"+responseoutline)
       else:
         data = get_datablog(article)
         blogarticle = header_and_title_tags(data)
@@ -213,3 +230,5 @@ with st.form('myform'):
         st.write("---\n\n")
         answertoneauthor = get_similar_public_figures(blogarticle)
         st.info("Author:\n\n"+answertoneauthor)
+        responseoutline = generate_outline(blogarticle)
+        st.info("Outline:\n\n"+responseoutline)
