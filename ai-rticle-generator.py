@@ -200,7 +200,7 @@ def generate_new_outline(responseoutline):
 
     % INSTRUCTIONS
      - As an experienced data scientist and technical writer. 
-     - Generate a new outline based on this last outline.
+     - By imitating one of these authors {authors}, it generates a new outline from the previous outline without them being similar.
      - Do not mention authors.
      - Do not answer anything other than the outline.
 
@@ -210,9 +210,9 @@ def generate_new_outline(responseoutline):
     % Your Output
     """
     
-    prompt = PromptTemplate(input_variables=['topic'], template=template)
+    prompt = PromptTemplate(input_variables=['topic', 'authors'], template=template)
 
-    prompt_query = prompt.format(topic=responseoutline)
+    prompt_query = prompt.format(topic=responseoutline,authors=answertoneauthor)
     llm_openai = OpenAI(model_name = "gpt-4", temperature=.7, openai_api_key = openai_api_key_input)
     new_response_outline = llm_openai(prompt_query)
 
