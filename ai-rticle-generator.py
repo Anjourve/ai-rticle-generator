@@ -87,6 +87,29 @@ def get_tone_author(blogarticle):
     llm_openai = OpenAI(model_name = "gpt-4", temperature=.7, openai_api_key = openai_api_key_input)
     toneauthor = llm_openai(prompt_value)
     return toneauthor
+
+def get_similar_public_figures(blogarticle):
+    template = """
+    You are an AI Bot that is very good at identifying authors, public figures, or writers whos style matches a piece of text
+    Your goal is to identify which authors, public figures, or writers sound most similar to the text below
+
+    % START EXAMPLES
+    {examples}
+    % END EXAMPLES
+
+    Which authors (list up to 4 if necessary) most closely resemble the examples above? Only respond with the names separated by commas
+    """
+
+    prompt = PromptTemplate(
+        input_variables=["examples"],
+        template=template,
+    )
+
+    # Using the short list of examples so save on tokens and (hopefully) the top tweets
+    final_prompt = prompt.format(examples=blogarticle)
+    llm_openai = OpenAI(model_name = "gpt-4", temperature=.7, openai_api_key = openai_api_key_input)
+    authors = llm_openai.predict(final_prompt)
+    return authors
     
 #def get_datablog(article):
 #    articleurl = f"{article}"
@@ -183,6 +206,8 @@ if article:
     st.write("---\n\n")
     answertoneauthor = get_tone_author(blogarticle)
     st.write("Author:\n\n"+answertoneauthor)
+    answertone = get_similar_public_figures(blogarticle)
+    st.write("Other Author:\n\n"+answertoneauthor)
   else:
     data = get_datablog(article)
     blogarticle = header_and_title_tags(data)
@@ -193,3 +218,5 @@ if article:
     st.write("---\n\n")
     answertoneauthor = get_tone_author(blogarticle)
     st.write("Author:\n\n"+answertoneauthor)
+    answertone = get_similar_public_figures(blogarticle)
+    st.write("Other Author:\n\n"+answertoneauthor)
