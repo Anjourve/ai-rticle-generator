@@ -28,30 +28,29 @@ def get_true_or_false_article(article):
     return respuesta_openai
 
 
-how_to_describe_tone ="""
-1. Pace: The speed at which the story progresses, which can create suspense or relaxation.
-2. Mood: The overall feeling or atmosphere that a piece of writing creates for the reader.
-3. Voice: The unique style or point of view of the author.
-4. Diction: The choice of words and phrases in a piece of writing.
-5. Syntax: The arrangement of words and phrases to create well-formed sentences.
-6. Imagery: The use of descriptive language to create visual representations of actions, objects, or ideas.
-7. Theme: The underlying message or main idea that the writer wants to convey.
-8. Perspective: The angle of considering things, which shows the opinion or feelings of the individuals involved in a situation.
-9. Irony: The use of words to convey a meaning that is the opposite of its literal meaning.
-10. Humor: The quality of being amusing or comic, especially as expressed in literature.
-11. Sarcasm: The use of irony to mock or convey contempt.
-12. Sentimentality: The quality of being excessively sentimental or emotional.
-13. Formality: The level of seriousness or informality in the language used.
-14. Rhythm: The pattern of stressed and unstressed syllables in a line of writing.
-15. Figurative Language: The use of words or expressions with a meaning that is different from the literal interpretation.
-16. Connotation: The emotional or cultural association with a word beyond its dictionary definition.
-17. Allusion: A reference to a well-known person, place, event, literary work, or work of art.
-18. Symbolism: The use of symbols to represent ideas or qualities.
-19. Foreshadowing: The use of hints or clues to suggest events that will occur later in the story.
-20. Allegory: A story, poem, or picture that can be interpreted to reveal a hidden meaning, typically a moral or political one.
-"""
-
-def get_authors_tone_description(how_to_describe_tone, blogarticle):
+def get_authors_tone_description(blogarticle):
+    how_to_describe_tone ="""
+    1. Pace: The speed at which the story progresses, which can create suspense or relaxation.
+    2. Mood: The overall feeling or atmosphere that a piece of writing creates for the reader.
+    3. Voice: The unique style or point of view of the author.
+    4. Diction: The choice of words and phrases in a piece of writing.
+    5. Syntax: The arrangement of words and phrases to create well-formed sentences.
+    6. Imagery: The use of descriptive language to create visual representations of actions, objects, or ideas.
+    7. Theme: The underlying message or main idea that the writer wants to convey.
+    8. Perspective: The angle of considering things, which shows the opinion or feelings of the individuals involved in a situation.
+    9. Irony: The use of words to convey a meaning that is the opposite of its literal meaning.
+    10. Humor: The quality of being amusing or comic, especially as expressed in literature.
+    11. Sarcasm: The use of irony to mock or convey contempt.
+    12. Sentimentality: The quality of being excessively sentimental or emotional.
+    13. Formality: The level of seriousness or informality in the language used.
+    14. Rhythm: The pattern of stressed and unstressed syllables in a line of writing.
+    15. Figurative Language: The use of words or expressions with a meaning that is different from the literal interpretation.
+    16. Connotation: The emotional or cultural association with a word beyond its dictionary definition.
+    17. Allusion: A reference to a well-known person, place, event, literary work, or work of art.
+    18. Symbolism: The use of symbols to represent ideas or qualities.
+    19. Foreshadowing: The use of hints or clues to suggest events that will occur later in the story.
+    20. Allegory: A story, poem, or picture that can be interpreted to reveal a hidden meaning, typically a moral or political one.
+    """
     template = """
         You are an AI Bot that is very good at generating writing in a similar tone as examples.
         Be opinionated and have an active voice.
@@ -280,7 +279,7 @@ with st.form('myform'):
         blogarticle = header_and_title_tags(data)
         st.info("Article:\n\n"+blogarticle)
         st.write("---\n\n")
-      answertone = get_authors_tone_description(how_to_describe_tone, blogarticle)
+      answertone = get_authors_tone_description(blogarticle)
       st.info("Tone Description:\n\n"+answertone)
       st.write("---\n\n")
       answertoneauthor = get_similar_public_figures(blogarticle)
