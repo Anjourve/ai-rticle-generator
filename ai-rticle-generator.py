@@ -12,11 +12,7 @@ from markdownify import markdownify as md
  
 
 st.set_page_config( page_title="Kalungi Ai-rticle", layout="wide")
-#st.header(":blue[Please provide us with the article you'd like to work with.]")
 openai_api_key_input = st.sidebar.text_input('OpenAI API Key', type='password')
-
-#article = st.text_area(label = "", placeholder = "Please enter the text or URL of the article here.", key = "article_imput")
-
 
 def get_true_or_false_article(article):
     prompt_temp = PromptTemplate(input_variables = ["dataarticle"], template = """ for this text = {dataarticle}
@@ -99,12 +95,6 @@ def get_similar_public_figures(blogarticle):
     llm_openai = OpenAI(model_name = "gpt-4", temperature=.7, openai_api_key = openai_api_key_input)
     authors = llm_openai.predict(final_prompt)
     return authors
-    
-#def get_datablog(article):
-#    articleurl = f"{article}"
-#    headers = {'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:80.0) Gecko/20100101 Firefox/80.0'}
-#    loader = UnstructuredURLLoader(urls=[articleurl], headers=headers, ssl_verify=False)
-#    return loader.load()
     
 def get_datablog(article):
 
@@ -247,18 +237,6 @@ def generate_new_article_with_outline(answertone, answertoneauthor, new_response
     new_article = llm_openai.predict(final_prompt)
 
     return new_article
-    
-#def get_article(article):
-#    dataarticleurl = get_datablog(article)
-#    text_splitter = RecursiveCharacterTextSplitter(chunk_size = 800, chunk_overlap = 0)
-#    docs = text_splitter.split_documents(dataarticleurl)
-
-#    prompt_temp = PromptTemplate(input_variables = ["docstext"], template = """ for this data = {docstext}
-#                                                                                - Extract the title of the article and all the content of the article (Leave a line between paragraphs every time you come across \n\n), excluding things that are unrelated, such as footnotes, buttons, information that is not relevant to the article or Or information about seeing any other articles made by the author.
-#                                                                                """)
-#    prompt_value = prompt_temp.format(docstext= docs)
-#    respuesta_openai = llm_openai(prompt_value)
-#    return respuesta_openai
 
 with st.form('myform'):
   article = st.text_input('Please enter the text or URL of the article here.:', '')
@@ -272,25 +250,24 @@ with st.form('myform'):
 
       if articleevaluated == "TRUE":
         blogarticle = header_and_title_tags(article)
-        st.info("Article:\n\n"+blogarticle)
+        st.text("Article:\n\n"+blogarticle)
         st.write("---\n\n")
       else:
         data = get_datablog(article)
         blogarticle = header_and_title_tags(data)
-        st.info("Article:\n\n"+blogarticle)
+        st.text("Article:\n\n"+blogarticle)
         st.write("---\n\n")
       answertone = get_authors_tone_description(blogarticle)
-      st.info("Tone Description:\n\n"+answertone)
+      st.text("Tone Description:\n\n"+answertone)
       st.write("---\n\n")
       answertoneauthor = get_similar_public_figures(blogarticle)
-      st.info("Author:\n\n"+answertoneauthor)
+      st.text("Author:\n\n"+answertoneauthor)
       st.write("---\n\n")
       responseoutline = generate_outline(blogarticle)
-      st.info("Outline:\n\n"+responseoutline)      
+      st.text("Outline:\n\n"+responseoutline)      
       st.write("---\n\n")
       new_response_outline = generate_new_outline(responseoutline)
-      st.info("New Outline:\n\n"+new_response_outline)
+      st.text("New Outline:\n\n"+new_response_outline)
       st.write("---\n\n")
       new_article = generate_new_article_with_outline(answertone, answertoneauthor, new_response_outline)
-      st.info("New Article:\n\n"+new_article)
-      
+      st.text("New Article:\n\n"+new_article)
